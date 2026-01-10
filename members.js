@@ -1,8 +1,3 @@
-// Supabase Client
-const SUPABASE_URL = 'https://sydynixecbokrttohcvr.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Re78GtQWMIxAvz8z0kX3mA_hhL0TC60';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 // Welcome Popup
 window.addEventListener('load', () => {
     const popup = document.getElementById('welcome-popup');
@@ -15,79 +10,71 @@ window.addEventListener('load', () => {
     }, 2000);
 });
 
-// Events
+// Supabase setup
 const eventsList = document.getElementById('events-list');
-let events = [];
 
-// Fetch events from Supabase
-async function fetchEvents() {
+// fetch events
+async function fetchEventsMember() {
     const { data, error } = await supabase
         .from('events')
         .select('*')
         .order('event_date', { ascending: true });
 
     if (error) {
-        console.error('Error fetching events:', error);
+        console.error("fetchEventsMember:", error.message);
+        eventsList.innerHTML = '<p class="no-events">Error loading events</p>';
         return;
     }
 
-    events = data.map(ev => ({
-        title: ev.title,
-        date: new Date(ev.event_date)
-    }));
-
-    updateEvents();
+    displayEventsMember(data);
 }
 
-// Update Events Display
-function updateEvents() {
+function displayEventsMember(events) {
     eventsList.innerHTML = '';
-    if (events.length === 0) {
+
+    if (!events || events.length === 0) {
         eventsList.innerHTML = '<p class="no-events">No events currently</p>';
         return;
     }
 
-    events.forEach((event, index) => {
+    events.forEach((event) => {
         const div = document.createElement('div');
         div.className = 'event';
-        div.id = `event-${index}`;
 
         const titleSpan = document.createElement('span');
         titleSpan.textContent = event.title;
 
         const countdownSpan = document.createElement('span');
-        countdownSpan.id = `countdown-${index}`;
-        countdownSpan.textContent = '';
+        countdownSpan.id = `countdown-${event.id}`;
 
         div.appendChild(titleSpan);
         div.appendChild(countdownSpan);
         eventsList.appendChild(div);
+
+        // live countdown
+        const eventTime = new Date(event.event_date).getTime();
+        setInterval(() => {
+            const now = Date.now();
+            const diff = eventTime - now;
+            const el = document.getElementById(`countdown-${event.id}`);
+
+            if (diff <= 0) {
+                el.textContent = 'Event started!';
+            } else {
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const m = Math.floor((diff / (1000 * 60)) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+            }
+        }, 1000);
     });
 }
 
-// Countdown Timer
-setInterval(() => {
-    events.forEach((event, index) => {
-        const now = new Date();
-        const diff = event.date - now;
-        const countdownEl = document.getElementById(`countdown-${index}`);
-        if (!countdownEl) return;
-        if (diff <= 0) {
-            countdownEl.textContent = 'Event started!';
-        } else {
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }
-    });
-}, 1000);
+// initial load
+fetchEventsMember();
 
-// Initial fetch
-fetchEvents();
-
-// Page Switching
+// Page Switching (unchanged)
 const navLinks = document.querySelectorAll('nav ul li a');
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {

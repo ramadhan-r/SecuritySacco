@@ -1,8 +1,3 @@
-// Supabase Client
-const SUPABASE_URL = 'https://sydynixecbokrttohcvr.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Re78GtQWMIxAvz8z0kX3mA_hhL0TC60';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 // Welcome Popup
 window.addEventListener('load', () => {
     const popup = document.getElementById('welcome-popup');
@@ -12,104 +7,104 @@ window.addEventListener('load', () => {
             popup.style.display = 'none';
             document.getElementById('dashboard-title').classList.remove('hidden');
         }, 500);
-    }, 2000);
+    }, 2002);
 });
 
-// Event Management
-const form = document.getElementById('event-form');
+// Supabase client setup (from supabase.js)
 const eventsList = document.getElementById('events-list');
-let events = [];
+const form = document.getElementById('event-form');
 
-// Fetch events from Supabase
-async function fetchEvents() {
+// Load events on admin page
+async function fetchEventsAdmin() {
     const { data, error } = await supabase
         .from('events')
         .select('*')
         .order('event_date', { ascending: true });
+
     if (error) {
-        console.error('Error fetching events:', error);
+        console.error("fetchEventsAdmin:", error.message);
         return;
     }
-    events = data.map(ev => ({
-        title: ev.title,
-        date: new Date(ev.event_date)
-    }));
-    updateEvents();
+    events = data;
+    displayEventsAdmin();
 }
 
-// Add new event
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = document.getElementById('event-title').value;
-    const date = document.getElementById('event-date').value;
-    if (!title || !date) return;
-
-    // Convert to ISO for Supabase
-    const eventDate = new Date(date).toISOString();
-
-    const { data, error } = await supabase
-        .from('events')
-        .insert([{ title, event_date: eventDate }]);
-
-    if (error) {
-        alert('Failed to add event: ' + error.message);
-        return;
-    }
-
-    document.getElementById('event-title').value = '';
-    document.getElementById('event-date').value = '';
-    fetchEvents(); // refresh
-});
-
-// Update Events Display
-function updateEvents() {
+// display/admin events
+function displayEventsAdmin() {
     eventsList.innerHTML = '';
-    if (events.length === 0) {
+
+    if (!events || events.length === 0) {
         eventsList.innerHTML = '<p class="no-events">No events currently</p>';
         return;
     }
 
-    events.forEach((event, index) => {
+    events.forEach((event) => {
         const div = document.createElement('div');
         div.className = 'event';
-        div.id = `event-${index}`;
+        div.id = `event-${event.id}`;
 
         const titleSpan = document.createElement('span');
         titleSpan.textContent = event.title;
 
-        const countdownSpan = document.createElement('span');
-        countdownSpan.id = `countdown-${index}`;
-        countdownSpan.textContent = '';
+        const dateSpan = document.createElement('span');
+        const d = new Date(event.event_date);
+        dateSpan.textContent = ` — ${d.toDateString()}`;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.style.marginLeft = '12px';
+        deleteBtn.addEventListener('click', async () => {
+            await deleteEvent(event.id);
+        });
 
         div.appendChild(titleSpan);
-        div.appendChild(countdownSpan);
+        div.appendChild(dateSpan);
+        div.appendChild(deleteBtn);
         eventsList.appendChild(div);
     });
 }
 
-// Countdown Timer
-setInterval(() => {
-    events.forEach((event, index) => {
-        const now = new Date();
-        const diff = event.date - now;
-        const countdownEl = document.getElementById(`countdown-${index}`);
-        if (!countdownEl) return;
-        if (diff <= 0) {
-            countdownEl.textContent = 'Event started!';
-        } else {
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }
-    });
-}, 1000);
+// ADD event
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-// Initial fetch
-fetchEvents();
+    const title = document.getElementById('event-title').value.trim();
+    const date = document.getElementById('event-date').value;
 
-// Page Switching
+    if (!title || !date) return;
+
+    const { error } = await supabase
+        .from('events')
+        .insert({ title: title, event_date: new Date(date).toISOString() });
+
+    if (error) {
+        console.error("add event error:", error.message);
+    } else {
+        document.getElementById('event-title').value = '';
+        document.getElementById('event-date').value = '';
+        fetchEventsAdmin();
+    }
+});
+
+// DELETE event
+async function deleteEvent(id) {
+    const { error } = await supabase
+        .from('events')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error("delete event error:", error.message);
+    } else {
+        fetchEventsAdmin();
+    }
+}
+
+// initial load
+let events = [];
+fetchEventsAdmin();
+
+// Page Switching (unchanged)
 const navLinks = document.querySelectorAll('nav ul li a');
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
