@@ -1,0 +1,133 @@
+/* Reset & Body */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Auth Container */
+.auth-container {
+    background-color: #1e1e1e;
+    padding: 30px 25px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.auth-container:hover {
+    transform: translateY(-3px);
+}
+
+.auth-container h1 {
+    margin-bottom: 25px;
+    color: #1f8f8e;
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+
+/* Form Toggle Buttons */
+.form-toggle {
+    display: flex;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.form-toggle button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #2b2b2b;
+    color: #e0e0e0;
+    font-weight: 600;
+    transition: background 0.3s, color 0.3s;
+}
+
+.form-toggle button.active {
+    background-color: #1f8f8e;
+    color: #fff;
+}
+
+.form-toggle button:hover:not(.active) {
+    background-color: #3a3a3a;
+}
+
+/* Forms */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.auth-form input, .auth-form select {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #e0e0e0;
+    font-size: 14px;
+    transition: border 0.3s, background 0.3s;
+}
+
+.auth-form input:focus, .auth-form select:focus {
+    outline: none;
+    border: 1px solid #1f8f8e;
+    background-color: #252525;
+}
+
+/* Buttons */
+.auth-form button {
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #1f8f8e;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.auth-form button:hover {
+    background-color: #146464;
+    transform: scale(1.02);
+}
+
+/* Messages */
+.msg {
+    font-size: 13px;
+    margin-top: 5px;
+    text-align: center;
+    color: #ff7070; /* default error */
+}
+
+/* Hidden Elements */
+.hidden {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .auth-container {
+        width: 90%;
+        padding: 25px 20px;
+    }
+
+    .auth-container h1 {
+        font-size: 24px;
+    }
+}

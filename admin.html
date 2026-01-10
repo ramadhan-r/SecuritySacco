@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duruma SACCO - Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Welcome Popup -->
+    <div id="welcome-popup">Welcome Administrator</div>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">Duruma SACCO</div>
+        <ul class="nav-links">
+            <li><a href="#" class="active" data-page="home">Home</a></li>
+            <li><a href="#" data-page="members">Members</a></li>
+            <li><a href="#" data-page="loans">Loans</a></li>
+            <li><a href="#" data-page="savings">Savings</a></li>
+            <li><a href="#" data-page="profile">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Page Content -->
+    <main id="main-content">
+
+        <!-- Admin Dashboard Title -->
+        <h1 id="dashboard-title" class="hidden">Admin Dashboard</h1>
+
+        <!-- Home Section -->
+        <section id="home-section" class="content-section">
+            <!-- Event Section -->
+            <section class="events-section">
+                <h2>Add Future Event</h2>
+                <form id="event-form">
+                    <input type="text" id="event-title" placeholder="Event Title" required>
+                    <input type="datetime-local" id="event-date" required>
+                    <button type="submit">Add Event</button>
+                </form>
+
+                <div id="events-list">
+                    <p class="no-events">No events currently</p>
+                </div>
+            </section>
+
+            <!-- Image Slider -->
+            <div class="slider-container">
+                <div class="slider-track">
+                    <img src="images/sacco1.png" alt="Sacco1">
+                    <img src="images/sacco2.png" alt="Sacco2">
+                    <img src="images/sacco3.png" alt="Sacco3">
+                    <img src="images/sacco4.png" alt="Sacco4">
+                    <img src="images/sacco5.png" alt="Sacco5">
+                    <!-- Duplicate for seamless sliding -->
+                    <img src="images/sacco1.png" alt="Sacco1">
+                    <img src="images/sacco2.png" alt="Sacco2">
+                    <img src="images/sacco3.png" alt="Sacco3">
+                    <img src="images/sacco4.png" alt="Sacco4">
+                    <img src="images/sacco5.png" alt="Sacco5">
+                </div>
+            </div>
+        </section>
+
+        <!-- Other Pages -->
+        <section id="members-section" class="content-section hidden">
+            <p class="coming-soon-text">Members page coming soon.</p>
+        </section>
+        <section id="loans-section" class="content-section hidden">
+            <p class="coming-soon-text">Loans page coming soon.</p>
+        </section>
+        <section id="savings-section" class="content-section hidden">
+            <p class="coming-soon-text">Savings page coming soon.</p>
+        </section>
+        <section id="profile-section" class="content-section hidden">
+            <p class="coming-soon-text">Profile page coming soon.</p>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
