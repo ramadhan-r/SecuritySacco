@@ -10,9 +10,11 @@ window.addEventListener('load', () => {
     }, 2002);
 });
 
-// Supabase client setup (from supabase.js)
+// Supabase client setup
 const eventsList = document.getElementById('events-list');
 const form = document.getElementById('event-form');
+
+let events = []; // ⚠ declare globally
 
 // Load events on admin page
 async function fetchEventsAdmin() {
@@ -23,11 +25,13 @@ async function fetchEventsAdmin() {
 
     if (error) {
         console.error("fetchEventsAdmin:", error.message);
+        eventsList.innerHTML = '<p class="no-events">Error loading events</p>';
         return;
     }
-    events = data;
+    events = data; // ✅ assign, don't use `let`
     displayEventsAdmin();
 }
+
 
 // display/admin events
 function displayEventsAdmin() {
@@ -101,8 +105,7 @@ async function deleteEvent(id) {
 }
 
 // initial load
-let events = [];
-fetchEventsAdmin();
+events = [];
 
 // Page Switching (unchanged)
 const navLinks = document.querySelectorAll('nav ul li a');
