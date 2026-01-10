@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Duruma SACCO</title>
+    <style>
+        /* Full-screen gradient background */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
+        }
+
+        .loader {
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            border-top: 8px solid #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.9);}
+            100% { opacity: 1; transform: scale(1);}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Duruma SACCO</h1>
+        <p>Redirecting you to login/signup...</p>
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = "auth.html"; // replace with your actual signup/login HTML file path
+        }, 3000);
+    </script>
+</body>
+</html>
