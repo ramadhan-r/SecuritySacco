@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Duruma SACCO</title>
     <style>
-        /* Full-screen gradient background */
+        /* Full-screen dark gradient background */
         body, html {
             margin: 0;
             padding: 0;
@@ -14,8 +14,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #4caf50, #81c784);
-            color: white;
+            background: linear-gradient(135deg, #0d1117, #1a1f29);
+            color: #ffffff;
             overflow: hidden;
         }
 
@@ -27,18 +27,18 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
         }
 
         p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
-            text-shadow: 1px 1px 6px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
         }
 
         .loader {
             border: 8px solid rgba(255, 255, 255, 0.2);
-            border-top: 8px solid #fff;
+            border-top: 8px solid #00bcd4; /* Cyan highlight for dark theme */
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -67,7 +67,7 @@
     <script>
         // Redirect after 3 seconds
         setTimeout(() => {
-            window.location.href = "auth.html"; // replace with your actual signup/login HTML file path
+            window.location.href = "auth.html"; // replace with your signup/login page
         }, 3000);
     </script>
 </body>
