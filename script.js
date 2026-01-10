@@ -1,3 +1,8 @@
+// Supabase Client
+const SUPABASE_URL = 'https://sydynixecbokrttohcvr.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Re78GtQWMIxAvz8z0kX3mA_hhL0TC60';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // Welcome Popup
 window.addEventListener('load', () => {
     const popup = document.getElementById('welcome-popup');
@@ -15,17 +20,45 @@ const form = document.getElementById('event-form');
 const eventsList = document.getElementById('events-list');
 let events = [];
 
-form.addEventListener('submit', (e) => {
+// Fetch events from Supabase
+async function fetchEvents() {
+    const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('event_date', { ascending: true });
+    if (error) {
+        console.error('Error fetching events:', error);
+        return;
+    }
+    events = data.map(ev => ({
+        title: ev.title,
+        date: new Date(ev.event_date)
+    }));
+    updateEvents();
+}
+
+// Add new event
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('event-title').value;
     const date = document.getElementById('event-date').value;
     if (!title || !date) return;
 
-    const event = { title, date: new Date(date) };
-    events.push(event);
+    // Convert to ISO for Supabase
+    const eventDate = new Date(date).toISOString();
+
+    const { data, error } = await supabase
+        .from('events')
+        .insert([{ title, event_date: eventDate }]);
+
+    if (error) {
+        alert('Failed to add event: ' + error.message);
+        return;
+    }
+
     document.getElementById('event-title').value = '';
     document.getElementById('event-date').value = '';
-    updateEvents();
+    fetchEvents(); // refresh
 });
 
 // Update Events Display
@@ -60,6 +93,7 @@ setInterval(() => {
         const now = new Date();
         const diff = event.date - now;
         const countdownEl = document.getElementById(`countdown-${index}`);
+        if (!countdownEl) return;
         if (diff <= 0) {
             countdownEl.textContent = 'Event started!';
         } else {
@@ -71,6 +105,9 @@ setInterval(() => {
         }
     });
 }, 1000);
+
+// Initial fetch
+fetchEvents();
 
 // Page Switching
 const navLinks = document.querySelectorAll('nav ul li a');

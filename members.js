@@ -1,3 +1,8 @@
+// Supabase Client
+const SUPABASE_URL = 'https://sydynixecbokrttohcvr.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Re78GtQWMIxAvz8z0kX3mA_hhL0TC60';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // Welcome Popup
 window.addEventListener('load', () => {
     const popup = document.getElementById('welcome-popup');
@@ -10,14 +15,29 @@ window.addEventListener('load', () => {
     }, 2000);
 });
 
-// View-only Events (preloaded demo events)
+// Events
 const eventsList = document.getElementById('events-list');
+let events = [];
 
-// Example events for members to view
-let events = [
-    { title: "Annual SACCO Meeting", date: new Date(new Date().getTime() + 86400000) }, // +1 day
-    { title: "Loan Disbursement", date: new Date(new Date().getTime() + 172800000) } // +2 days
-];
+// Fetch events from Supabase
+async function fetchEvents() {
+    const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('event_date', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching events:', error);
+        return;
+    }
+
+    events = data.map(ev => ({
+        title: ev.title,
+        date: new Date(ev.event_date)
+    }));
+
+    updateEvents();
+}
 
 // Update Events Display
 function updateEvents() {
@@ -45,15 +65,13 @@ function updateEvents() {
     });
 }
 
-// Initial display
-updateEvents();
-
 // Countdown Timer
 setInterval(() => {
     events.forEach((event, index) => {
         const now = new Date();
         const diff = event.date - now;
         const countdownEl = document.getElementById(`countdown-${index}`);
+        if (!countdownEl) return;
         if (diff <= 0) {
             countdownEl.textContent = 'Event started!';
         } else {
@@ -65,6 +83,9 @@ setInterval(() => {
         }
     });
 }, 1000);
+
+// Initial fetch
+fetchEvents();
 
 // Page Switching
 const navLinks = document.querySelectorAll('nav ul li a');
