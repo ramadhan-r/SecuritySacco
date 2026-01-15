@@ -120,3 +120,20 @@ navLinks.forEach(link => {
         link.classList.add('active');
     });
 });
+// Auto logout on tab close or inactivity (Supabase)
+
+let lastActivity = Date.now();
+
+["click", "mousemove", "keydown", "scroll"].forEach(event => {
+  document.addEventListener(event, () => {
+    lastActivity = Date.now();
+  });
+});
+
+setInterval(async () => {
+  const IDLE_LIMIT = 10 * 60 * 1000; // 10 minutes
+  if (Date.now() - lastActivity > IDLE_LIMIT) {
+    await supabase.auth.signOut();
+    window.location.href = "index.html";
+  }
+}, 60000);
