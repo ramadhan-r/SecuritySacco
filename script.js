@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
             popup.style.display = 'none';
             document.getElementById('dashboard-title').classList.remove('hidden');
         }, 500);
-    }, 2002);
+    }, 2000);
 });
 
 // Supabase client setup
@@ -31,7 +31,6 @@ async function fetchEventsAdmin() {
     events = data; // ✅ assign, don't use `let`
     displayEventsAdmin();
 }
-
 
 // display/admin events
 function displayEventsAdmin() {
@@ -106,8 +105,9 @@ async function deleteEvent(id) {
 
 // initial load
 events = [];
+fetchEventsAdmin(); // make sure events show on page load
 
-// Page Switching (unchanged)
+// Page Switching
 const navLinks = document.querySelectorAll('nav ul li a');
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -120,8 +120,8 @@ navLinks.forEach(link => {
         link.classList.add('active');
     });
 });
-// Auto logout on tab close or inactivity (Supabase)
 
+// Auto logout on tab close or inactivity
 let lastActivity = Date.now();
 
 ["click", "mousemove", "keydown", "scroll"].forEach(event => {
